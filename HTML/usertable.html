@@ -1,0 +1,90 @@
+<!-- usertable.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Table</title>
+    <link rel="stylesheet" href="/CSS/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="proj-name">
+            <a href="/HTML/index.html" class="app"><h1>ChatBot</h1></a>
+        </div>
+        <div>
+            <ul class="functions">
+                <ul class="register">
+                    <a href="/HTML/signup.html" class="reg" target="_blank"><li >Register</li></a>
+                </ul>
+                <ul class="login">
+                    <a href="#" class="log" target="_blank"><li >Logout</li></a>
+                </ul>
+            </ul>
+        </div>
+    </nav>
+    <div class="user-table-container">
+        <h1>User Table</h1>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <!-- <th>Email</th> -->
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- User data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Fetch user data from local storage and update the table
+        var users = JSON.parse(localStorage.getItem("users")) || [];
+        var tableBody = document.getElementById("userTable").getElementsByTagName('tbody')[0];
+
+        // Get query parameters from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        console.log(urlParams);
+        var loggedInEmail = urlParams.get('email');
+        var loggedInPassword = urlParams.get('password');
+        console.log(loggedInEmail);
+        console.log(loggedInPassword);
+
+        users.forEach(function(user) {
+            // Check if the current user is the logged-in user
+            if (user.email !== loggedInEmail || user.password !== loggedInPassword) {
+                var row = tableBody.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                // var cell3 = row.insertCell(2);
+
+                cell1.innerHTML = user.fullName;
+                // cell2.innerHTML = user.email;
+
+                // Create a button in cell 3
+                var button = document.createElement("button");
+                button.innerHTML = "Click Me";
+                button.className = "action-button";
+                cell2.appendChild(button);
+
+                // Add an event listener to the button if needed
+                button.addEventListener("click", function() {
+                // Handle button click event
+                // Redirect to chatui.html
+                window.location.href = "chatui.html?username=" + encodeURIComponent(user.fullName);
+            });
+            }
+        });
+        // Logout button click event
+        document.querySelector('.log').addEventListener('click', function() {
+            // Remove login data from local storage
+            localStorage.removeItem('loginData');
+            
+            // Redirect to index.html
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>

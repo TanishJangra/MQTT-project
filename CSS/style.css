@@ -1,0 +1,234 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: #10898d;
+    padding: 10px;
+    color: white;
+}
+
+.app{
+    text-decoration: none;
+    color: white;
+}
+.functions{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 30px;
+    list-style: none;
+    margin-right: 40px;
+}
+.register{
+    cursor: pointer;
+    padding: 8px;
+    background-color: darkcyan;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkcyan;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.login:hover{
+    background-color: cadetblue;
+}
+
+.register:hover{
+    background-color: cadetblue;
+}
+
+.reg{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+}
+.log{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+}
+
+.chat-container{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.chat-btn{
+    padding: 12px;
+    background-color: darkslateblue;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.chat-btn:hover{
+    background-color:rgb(46, 37, 101);
+}
+
+.chat{
+    text-decoration: none;
+    color: white;
+}
+
+/* Registration Page */
+
+.registration-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 40px;;
+}
+
+.form-fields{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.outer-box{
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to top left, #0b54524b,#237f8b);
+}
+.inner-box{
+    width: 400px;
+    margin: 0 auto;
+    /* margin ko left aur right se auto kra h taaki (inner-box) apne parent(outer-box) ke center me aa jaega */
+    position: relative;
+    top: 40%;
+    transform: translateY(-50%);
+    /* Above three lines are used to push the page to the center */
+    padding: 20px 40px;
+    /* background-color: #979b9e33; */
+    background: linear-gradient(to top left,#ffffffff,#ffffff33);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    box-shadow: 2px 2px 2px #276b8dcc;
+    z-index: 2;
+} 
+.signup-header h1{
+    font-size: 2.5rem;
+    color: #212121;
+}
+.signup-header p{
+    font-size: 0.9rem;
+    color: #555;
+    /* light color given to statement written below signup */
+}
+.signup-body{
+    margin: 20px 0;
+}
+.signup-body p{
+    margin: 10px 0;
+}
+.signup-body p label{
+    display: block;
+    /* now the input row will come in next line */
+    font-weight: bold;
+}
+.signup-body p input{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #cccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 4px;
+}
+.signup-body p input[type="submit"]{
+    background-color: #3498db;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.signup-body p input[type="submit"]:hover{
+    background-color: #276f9f;
+}
+.signup-footer p{
+    color: #555;
+    text-align: center;
+}
+.signup-footer p a{
+    color: #276f9f;
+}
+.circle{
+    width: 200px;
+    height: 200px;
+    border-radius: 100px; /* half of width and height*/
+    background: linear-gradient(to top right, #ffffff33,#ffffffff);
+    position: absolute;
+}
+.c1{
+    top: 100px;
+    left: 40px;
+}
+.c2{
+    bottom: 200px;
+    right: 50px;
+}
+
+/* usertable */
+
+.user-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    /* max-width: 600px; */
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.action-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+

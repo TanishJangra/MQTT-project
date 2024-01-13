@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+    <link rel="stylesheet" href="/CSS/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="proj-name">
+            <a href="/HTML/index.html" class="app"><h1>ChatBot</h1></a>
+        </div>
+        <div>
+            <ul class="functions">
+                <ul class="register">
+                    <a href="/HTML/signup.html" class="reg" target="_blank"><li >Register</li></a>
+                </ul>
+                <ul class="login">
+                    <a href="/HTML/login.html" class="log" target="_blank"><li >Login</li></a>
+                </ul>
+            </ul>
+        </div>
+    </nav>
+    <div class="outer-box">
+        <div class="inner-box">
+            <header class="signup-header">
+                <h1>SignUp</h1>
+                <p>It just takes 30 seconds</p>
+            </header>
+            <main class="signup-body">
+                <form id="signupForm" action="">
+                    <p>
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" placeholder="Your name" required>
+                    </p>
+                    <p>
+                        <label for="email">Your Email</label>
+                        <input type="text" id="email" placeholder="Your Email" required>
+                    </p>
+                    <p>
+                        <label for="password">Your Password</label>
+                        <input type="password" id="password" placeholder="at least 8 characters" required>
+                    </p>
+                    <p>
+                        
+                        <input type="submit" id="submit" value="Create Account">
+                    </p>
+                </form>
+            </main>
+            <footer class="signup-footer">
+                <p>Already Have An Account? <a href="/HTML/login.html">Login</a></p>
+            </footer>
+        </div>
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+    </div>
+    <script src="/JavaScript/signup.js"></script>
+</body>
+</html>
