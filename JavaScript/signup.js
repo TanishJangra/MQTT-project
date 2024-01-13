@@ -26,6 +26,6 @@ document.getElementById("signupForm").addEventListener("submit", function(event)
         alert("Account created successfully!");
 
         // Redirect to user table page
-        window.location.href = "usertable.html";
+        window.location.href = "login.html";
     }
 });

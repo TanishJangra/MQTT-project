@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar">
         <div class="proj-name">
-            <a href="/HTML/index.html" class="app"><h1>ChatBot</h1></a>
+            <a href="../index.html" class="app"><h1>ChatBot</h1></a>
         </div>
         <div>
             <ul class="functions">
@@ -18,7 +18,7 @@
                     <a href="/HTML/signup.html" class="reg" target="_blank"><li >Register</li></a>
                 </ul>
                 <ul class="login">
-                    <a href="#" class="log" target="_blank"><li >Logout</li></a>
+                    <a href="../index.html" class="log" target="_blank"><li >Logout</li></a>
                 </ul>
             </ul>
         </div>
@@ -51,6 +51,9 @@
         var loggedInPassword = urlParams.get('password');
         console.log(loggedInEmail);
         console.log(loggedInPassword);
+
+        // Sort users array based on fullName
+        users.sort((a, b) => a.fullName.localeCompare(b.fullName));
 
         users.forEach(function(user) {
             // Check if the current user is the logged-in user
