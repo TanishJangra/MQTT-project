@@ -1,5 +1,5 @@
 let selectedUser;
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const chatWindow = document.getElementById("chatWindow");
   const closeButton = document.getElementById("closeButton");
   const chatHeader = document.getElementById("chatHeader");
@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
   sendButton.addEventListener("click", handleSendMessage);
 
   // Get current logged-in user and selected user from local storage
-  const currentLoggedInUser = JSON.parse(localStorage.getItem("currentLoggedInUser"));
-   selectedUser = JSON.parse(localStorage.getItem("selectedUser"));
+  const currentLoggedInUser = JSON.parse(
+    localStorage.getItem("currentLoggedInUser")
+  );
+  selectedUser = JSON.parse(localStorage.getItem("selectedUser"));
 
   // Set the chat header with the selected user's name
   chatHeader.textContent = selectedUser.fullName;
@@ -63,7 +65,7 @@ function onConnectionLost(responseObject) {
 }
 
 function onMessageArrived(message) {
-  const sender = message.destinationName.split('/')[1];  // Extract sender from the topic
+  const sender = message.destinationName.split("/")[1]; // Extract sender from the topic
 
   // Display received messages on the selected user's chat UI
   const receivedMessage = { text: message.payloadString, sender: sender };
@@ -76,21 +78,36 @@ function connectToMQTT(username) {
   window.host = "test.mosquitto.org"; // Replace with your MQTT broker host
   window.port = 8080; // Replace with your MQTT broker port
 
-  console.log("Creating client...");
-  window.client = new window.Paho.Client(window.host, Number(window.port), "abcd");
+  console.log("Creating client...", window.Paho);
+  // window.client = new window.Paho.Client(
+  //   window.host,
+  //   Number(window.port),
+  //   window.clientID
+  // );
+
+   window.client = new window.Paho.Client(
+     "test.mosquitto.org",
+     8080,
+     "your-client-id"
+   );
+
+  console.log(window.client);
 
   window.client.onConnectionLost = onConnectionLost;
   window.client.onMessageArrived = onMessageArrived;
 
+ 
+
   window.client.connect({
     onSuccess: () => onConnect(username),
-    userName: username,  // Use the current user's name as the username
-    password: "your_mqtt_password" // Replace with your MQTT broker password
+    userName: username, // Use the current user's name as the username
+    password: "your_mqtt_password", // Replace with your MQTT broker password
   });
 }
 
 function onConnect(username) {
-  const topic = `chat/${selectedUser.fullName}`; // Use the selected user's name as the topic
+  // const topic = chat/${selectedUser.fullName}; // Use the selected user's name as the topic
+  const topic = "alpha";
   console.log("Subscribing to topic " + topic);
   window.client.subscribe(topic);
 
