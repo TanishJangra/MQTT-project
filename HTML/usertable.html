@@ -76,7 +76,20 @@
                 button.addEventListener("click", function() {
                 // Handle button click event
                 // Redirect to chatui.html
-                window.location.href = "chatui.html?username=" + encodeURIComponent(user.fullName);
+                // window.location.href = "chatui.html?username=" + encodeURIComponent(user.fullName);
+                // Store both the logged-in user and the clicked user in local storage
+                localStorage.setItem("currentLoggedInUser", JSON.stringify({
+                        fullName: loggedInEmail,
+                        // Add more details if needed
+                    }));
+
+                    localStorage.setItem("selectedUser", JSON.stringify({
+                        fullName: user.fullName,
+                        // Add more details if needed
+                    }));
+
+                    // Redirect to chatui.html
+                    window.location.href = "chatui.html";
             });
             }
         });
@@ -91,3 +104,4 @@
     </script>
 </body>
 </html>
+

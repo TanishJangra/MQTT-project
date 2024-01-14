@@ -1,6 +1,4 @@
-// mqtt-sender.js
-// import mqtt from 'mqtt';
-const mqtt = require('mqtt');
+import mqtt from "mqtt"
 
 const client = mqtt.connect("mqtt://broker.hivemq.com");
 
