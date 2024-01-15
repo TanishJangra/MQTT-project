@@ -183,3 +183,34 @@ button {
     margin-right: auto;
   }
   
+  .own-message {
+    /* Your styles for messages sent by the current user (right side) */
+  padding: 9px;
+  margin: 8px;
+  border-radius: 8px;
+  word-wrap: break-word;
+  max-width: 67%;
+  overflow: hidden;
+  word-break: break-word;
+
+  background-color: #2a454e;
+  color: #00dfbe;
+  text-align: right;
+  margin-left: auto;
+}
+
+.other-message {
+  /* Your styles for messages received from the other user (left side) */
+  padding: 9px;
+  margin: 8px;
+  border-radius: 8px;
+  word-wrap: break-word;
+  max-width: 67%;
+  overflow: hidden;
+  word-break: break-word;
+  /* Add any other styling you want for other messages */
+  background-color: #00dfbe;
+  color: #fffeff;
+  text-align: left;
+  margin-right: auto;
+}

@@ -1,42 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat App</title>
-    <link rel="stylesheet" href="../CSS/style.css" />
-    <link rel="stylesheet" href="../CSS/chatui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.js" type="text/javascript" async></script>
-    <script src="../JavaScript/app.js" type="text/javascript"></script>
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="proj-name">
-          <a href="../index.html" class="app"><h1>ChatBot</h1></a>
-      </div>
-      <div>
-          <ul class="functions">
-              <ul class="register">
-                  <a href="./signup.html" class="reg" target="_blank"><li >Register</li></a>
-              </ul>
-              <ul class="login">
-                  <a href="../index.html" class="log" target="_blank"><li >Logout</li></a>
-              </ul>
-          </ul>
-      </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat App</title>
+  <link rel="stylesheet" href="../CSS/style.css" />
+  <link rel="stylesheet" href="../CSS/chatui.css">
+    
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="proj-name">
+      <a href="../index.html" class="app">
+        <h1>ChatBot</h1>
+      </a>
+    </div>
+    <div>
+      <ul class="functions">
+        <ul class="register">
+          <a href="./signup.html" class="reg" target="_blank">
+            <li>Register</li>
+          </a>
+        </ul>
+        <ul class="login">
+          <a href="../index.html" class="log" target="_blank">
+            <li>Logout</li>
+          </a>
+        </ul>
+      </ul>
+    </div>
   </nav>
-    <div class="main">
-      <div class="chat-window" id="chatWindow">
-        <button class="close-button" id="closeButton">&times;</button>
-        <div class="chat-header" id="chatHeader">User</div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input">
-            <input type="text" placeholder="Type your message..." id="messageInput">
-            <button id="sendButton">Send</button>
-        </div>
+  <div class="main">
+    <div class="chat-window" id="chatWindow">
+      <button class="close-button" id="closeButton">&times;</button>
+      <div class="chat-header" id="chatHeader">User</div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" placeholder="Type your message..." id="messageInput">
+        <button id="sendButton">Send</button>
       </div>
     </div>
-  
+  </div>
 
-  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+
+  <script src="../JavaScript/app.js" type="text/javascript"></script>
+</body>
+
 </html>

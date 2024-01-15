@@ -1,0 +1,111 @@
+<!-- chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="..//CSS/chat.css"> -->
+    <title>Chat Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Chat with <span id="username"></span></h2>
+        </div>
+        <div class="chat-box" id="chatBox"></div>
+        <div class="input-container">
+            <textarea id="messageInput" placeholder="Type your message..."></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let client;
+        let currentUsername;
+        let clickedUsername;
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            clickedUsername = params.get('clickedUser');
+            currentUsername = params.get('currentUser');
+
+            document.getElementById('username').textContent = clickedUsername || 'User';
+
+            // MQTT connection setup
+            client = new Paho.MQTT.Client("mqtt.eclipse.org", 443, "clientId_" + currentUsername);
+            client.onConnectionLost = onConnectionLost;
+            client.onMessageArrived = onMessageArrived;
+
+            client.connect({
+                onSuccess: onConnect,
+                useSSL: true
+            });
+        });
+
+        function onConnect() {
+            // Subscribe to the MQTT topic with the clicked user's name
+            const subscribeTopic = chat/${clickedUsername};
+            client.subscribe(subscribeTopic);
+
+            // Display a message indicating successful connection
+            displaySystemMessage("Connected to the chat");
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (message !== '') {
+                // Display the message in the current user's chat box
+                displayUserMessage(currentUsername, message);
+
+                // Publish the message to the MQTT topic with the clicked user's name
+                const publishTopic = chat/${clickedUsername};
+                const messagePayload = JSON.stringify({ sender: currentUsername, message: message });
+                client.send(publishTopic, messagePayload);
+
+                // Clear the input field
+                messageInput.value = '';
+            }
+        }
+
+        function onMessageArrived(message) {
+            // Display the received message in the chat box
+            const messageData = JSON.parse(message.payloadString);
+            displayUserMessage(messageData.sender, messageData.message);
+        }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                displaySystemMessage(Connection lost: ${responseObject.errorMessage});
+            }
+        }
+
+        function displayUserMessage(sender, message) {
+            const chatBox = document.getElementById('chatBox');
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('message-container');
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = ${message};
+
+            messageContainer.appendChild(messageElement);
+            chatBox.appendChild(messageContainer);
+        }
+
+        function displaySystemMessage(message) {
+            const chatBox = document.getElementById('chatBox');
+            const systemMessageContainer = document.createElement('div');
+            systemMessageContainer.classList.add('system-message-container');
+
+            const systemMessageElement = document.createElement('div');
+            systemMessageElement.classList.add('system-message');
+            systemMessageElement.textContent = message;
+
+            systemMessageContainer.appendChild(systemMessageElement);
+            chatBox.appendChild(systemMessageContainer);
+        }
+    </script>
+</body>
+</html>

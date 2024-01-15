@@ -1,136 +1,96 @@
-let selectedUser;
-document.addEventListener("DOMContentLoaded", function () {
-  const chatWindow = document.getElementById("chatWindow");
-  const closeButton = document.getElementById("closeButton");
-  const chatHeader = document.getElementById("chatHeader");
-  const chatMessages = document.getElementById("chatMessages");
-  const messageInput = document.getElementById("messageInput");
-  const sendButton = document.getElementById("sendButton");
-
-  let messages = [];
-
-  closeButton.addEventListener("click", handleCloseChat);
-
-  sendButton.addEventListener("click", handleSendMessage);
-
-  // Get current logged-in user and selected user from local storage
-  const currentLoggedInUser = JSON.parse(
-    localStorage.getItem("currentLoggedInUser")
-  );
-  selectedUser = JSON.parse(localStorage.getItem("selectedUser"));
-
-  // Set the chat header with the selected user's name
-  chatHeader.textContent = selectedUser.fullName;
-
-  // Connect to MQTT broker when the page loads
-  connectToMQTT(currentLoggedInUser.fullName);
-
-  function handleSendMessage() {
-    const newMessage = messageInput.value.trim();
-    if (newMessage === "") return;
-
-    // Display the sent message on the current user's chat UI
-    const sentMessage = { text: newMessage, sender: "user" }; // Assuming the sender is the current user
-    messages.push(sentMessage);
-    displayMessages();
-
-    // Publish the message to the MQTT broker
-    publishMessage(newMessage);
-
-    // Clear the input field
-    messageInput.value = "";
-  }
-
-  function handleCloseChat() {
-    chatWindow.style.display = "none";
-  }
-
-  function displayMessages() {
-    chatMessages.innerHTML = ""; // Clear previous messages
-
-    messages.forEach((message) => {
-      const messageElement = document.createElement("div");
-      messageElement.className = `message ${message.sender}`;
-      messageElement.textContent = message.text;
-      chatMessages.appendChild(messageElement);
-    });
-
-    // Scroll to the bottom when new messages are added
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-});
-
-function onConnectionLost(responseObject) {
-  console.error("Connection lost:", responseObject.errorMessage);
-}
-
-function onMessageArrived(message) {
-  const sender = message.destinationName.split("/")[1]; // Extract sender from the topic
-
-  // Display received messages on the selected user's chat UI
-  const receivedMessage = { text: message.payloadString, sender: sender };
-  messages.push(receivedMessage);
-  displayMessages();
-}
-
-function connectToMQTT(username) {
-  window.clientID = "clientID - " + parseInt(Math.random() * 100);
-  window.host = "test.mosquitto.org"; // Replace with your MQTT broker host
-  window.port = 8080; // Replace with your MQTT broker port
-
-  console.log("Creating client...", window.Paho);
-  // window.client = new window.Paho.Client(
-  //   window.host,
-  //   Number(window.port),
-  //   window.clientID
-  // );
-
-   window.client = new window.Paho.Client(
-     "test.mosquitto.org",
-     8080,
-     "your-client-id"
-   );
-
-  console.log(window.client);
-
-  window.client.onConnectionLost = onConnectionLost;
-  window.client.onMessageArrived = onMessageArrived;
-
+document.addEventListener('DOMContentLoaded', function () {
+  // Establish MQTT connection using HiveMQ public broker
+  const broker = 'broker.hivemq.com';
+  const port = 8000; // You can use port 1883 as well
+  const currentUsername = JSON.parse(localStorage.getItem('currentLoggedInUser')) || {};
+  const clickedUsername = JSON.parse(localStorage.getItem('selectedUser')) || {};
+  const client = new Paho.MQTT.Client(broker, port, `clientId_${currentUsername.fullName}_${Date.now()}`);
+  console.log(currentUsername.fullName,clickedUsername.fullName);
  
+  // Set the topic for publishing and subscribing
+  const publishTopic = `chat/${currentUsername.fullName}/${clickedUsername.fullName}`;
+  const subscribeTopic = `chat/${clickedUsername.fullName}/${currentUsername.fullName}`;
 
-  window.client.connect({
-    onSuccess: () => onConnect(username),
-    userName: username, // Use the current user's name as the username
-    password: "your_mqtt_password", // Replace with your MQTT broker password
-  });
-}
+  console.log(publishTopic, subscribeTopic)
 
-function onConnect(username) {
-  // const topic = chat/${selectedUser.fullName}; // Use the selected user's name as the topic
-  const topic = "alpha";
-  console.log("Subscribing to topic " + topic);
-  window.client.subscribe(topic);
+  // Set the chat header text
+  const chatHeader = document.getElementById('chatHeader');
+  chatHeader.textContent = `Chat with ${clickedUsername.fullName}`;
 
-  // Subscribe the selected user to the topic where the current user publishes messages
-  const senderTopic = `chat/${currentLoggedInUser.fullName}`;
-  console.log("Subscribing selected user to sender topic " + senderTopic);
-  window.client.subscribe(senderTopic);
-}
+  // Function to send a message
+  function sendMessage(message) {
+      // Publish the message to the selected user's topic
+      const messagePayload = JSON.stringify({ sender: currentUsername.fullName, message: message });
+      client.send(publishTopic, messagePayload);
 
-function publishMessage(message) {
-  const topic = `chat/${selectedUser.fullName}`;
-  console.log("Publishing message...");
+      // Update the current logged-in user's chatbox
+      updateChat(currentUsername.fullName, message, true);
 
-  // Check if the client is connected before sending the message
-  if (window.client.isConnected()) {
-    var messageObject = new Paho.MQTT.Message(message);
-    messageObject.destinationName = topic;
-
-    window.client.send(messageObject);
-
-    console.log("Message published:", message);
-  } else {
-    console.error("MQTT client is not connected. Unable to publish message.");
+      // For demonstration purposes, you can update your chat UI with the sent message
+      console.log(`Sent message to ${clickedUsername.fullName}: ${message}`);
   }
+
+  // Function to update the chat UI with a message
+  function updateChat(username, message, isCurrentUser) {
+    const chatMessages = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    
+    // Use different classes for styling based on whether the message is from the current user or not
+    messageDiv.className = isCurrentUser ? 'own-message' : 'other-message';
+    
+    messageDiv.textContent = `${username}: ${message}`;
+    chatMessages.appendChild(messageDiv);
 }
 
+  // Subscribe to both current user's and clicked user's topics
+  client.onConnectionLost = function (responseObject) {
+      if (responseObject.errorCode !== 0) {
+          console.error(`Connection lost: ${responseObject.errorMessage}`);
+      }
+  };
+
+  client.onMessageArrived = function (message) {
+    // Handle incoming messages
+    const messageData = JSON.parse(message.payloadString);
+
+    // Check if the message is not sent by the current user
+    if (messageData.sender !== currentUsername.fullName) {
+        // Update your chat UI with the received message
+        updateChat(messageData.sender, messageData.message, false);
+    }
+};
+
+
+  let options = {
+      useSSL: false, // Change to true if the broker supports secure WebSocket
+      onSuccess: function () {
+          console.log("Connected to the MQTT broker");
+
+          // Subscribe to the unique topic for messages sent to the current user
+          client.subscribe(subscribeTopic);
+
+          // Subscribe to the unique topic for messages sent to the clicked user
+          client.subscribe(publishTopic);
+      },
+      onFailure: function (responseObject) {
+          console.error("Failed to connect to the MQTT broker. Error: " + responseObject.errorMessage);
+          // Handle failure, you might want to display a message to the user
+      }
+  };
+
+  client.connect(options);
+
+  // Example usage: Call sendMessage function when the send button is clicked
+  document.getElementById('sendButton').addEventListener('click', function () {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+
+      if (message !== '') {
+          sendMessage(message);
+
+          // Clear the input field after sending the message
+          messageInput.value = '';
+      }
+  });
+});
+  
