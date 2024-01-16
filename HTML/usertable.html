@@ -26,13 +26,12 @@
         </div>
     </nav>
     <div class="user-table-container">
-        <h1>User Table</h1>
+        <h1 class="table-header">User Table</h1>
         <table id="userTable">
             <thead>
                 <tr>
-                    <th>Full Name</th>
-                    <!-- <th>Email</th> -->
-                    <th>Action</th>
+                    <th class="full_name">Full Name</th>
+                    <th class="full_name">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +47,7 @@
 
         // Get query parameters from the URL
         var urlParams = new URLSearchParams(window.location.search);
-        console.log(urlParams);
+        // console.log(urlParams);
         var loggedInEmail = urlParams.get('email');
         var loggedInPassword = urlParams.get('password');
         var loggedInName; // New variable to store the name
@@ -60,9 +59,7 @@
                 break;
             }
         }
-
         console.log(loggedInName);
-
         // Sort users array based on fullName
         users.sort((a, b) => a.fullName.localeCompare(b.fullName));
 
@@ -72,18 +69,16 @@
                 var row = tableBody.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
-
+                cell1.className="users_in_table";
                 cell1.innerHTML = user.fullName;
-
                 var button = document.createElement("button");
-                button.innerHTML = "Click Me";
+                button.innerHTML = " chat ";
                 button.className = "action-button";
                 cell2.appendChild(button);
 
                 button.addEventListener("click", function () {
                     // Handle button click event
                     // Redirect to chatui.html
-                    // window.location.href = "chatui.html?username=" + encodeURIComponent(user.fullName);
                     // Store both the logged-in user and the clicked user in local storage
                     localStorage.setItem("currentLoggedInUser", JSON.stringify({
                         fullName: loggedInName, // Change to fullName

@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Use different classes for styling based on whether the message is from the current user or not
     messageDiv.className = isCurrentUser ? 'own-message' : 'other-message';
     
-    messageDiv.textContent = `${username}: ${message}`;
+    messageDiv.textContent = `${message}`;
     chatMessages.appendChild(messageDiv);
 }
 

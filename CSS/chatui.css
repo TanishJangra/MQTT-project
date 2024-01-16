@@ -194,7 +194,7 @@ button {
   word-break: break-word;
 
   background-color: #2a454e;
-  color: #00dfbe;
+  color: #e3ebea;
   text-align: right;
   margin-left: auto;
 }
@@ -209,7 +209,7 @@ button {
   overflow: hidden;
   word-break: break-word;
   /* Add any other styling you want for other messages */
-  background-color: #00dfbe;
+  background-color: #15695c;
   color: #fffeff;
   text-align: left;
   margin-right: auto;

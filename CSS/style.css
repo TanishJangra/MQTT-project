@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;&display=swap');
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navbar{
@@ -34,6 +36,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px;
+    border: 1px solid white;
 }
 
 .login{
@@ -47,10 +50,12 @@
 }
 .login:hover{
     background-color: cadetblue;
+    transition: ease-in-out;
 }
 
 .register:hover{
     background-color: cadetblue;
+    transition: ease-in-out;
 }
 
 .reg{
@@ -74,7 +79,7 @@
 }
 
 .chat-btn{
-    padding: 12px;
+    padding: 18px;
     background-color: darkslateblue;
     color: white;
     border-radius: 8px;
@@ -233,3 +238,14 @@ th {
     border-radius: 4px;
 }
 
+.table-header{
+    font-family: 'Poppins', sans-serif;
+}
+
+.full_name{
+    font-family: 'Poppins', sans-serif;
+}
+
+.users_in_table{
+    font-family: 'Poppins', sans-serif;
+}
