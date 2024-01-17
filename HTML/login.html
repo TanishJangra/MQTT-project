@@ -1,82 +1,103 @@
 <!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="../CSS/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../CSS/style.css" />
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="proj-name">
-            <a href="../index.html" class="app"><h1>ChatBot</h1></a>
-        </div>
-        <div>
-            <ul class="functions">
-                <ul class="register">
-                    <a href="./signup.html" class="reg" target="_blank"><li >Register</li></a>
-                </ul>
-                <ul class="login">
-                    <a href="./usertable.html" class="log" id="loginButton"><li >Login</li></a>
-                </ul>
-            </ul>
-        </div>
+      <div class="proj-name">
+        <a href="../index.html" class="app"><h1>ChatBot</h1></a>
+      </div>
+      <div>
+        <ul class="functions">
+          <ul class="register">
+            <a href="./signup.html" class="reg" target="_blank"
+              ><li>Register</li></a
+            >
+          </ul>
+          <ul class="login">
+            <a href="./usertable.html" class="log" id="loginButton"
+              ><li>Login</li></a
+            >
+          </ul>
+        </ul>
+      </div>
     </nav>
     <div class="outer-box">
-        <div class="inner-box">
-            <header class="signup-header">
-                <h1>Login</h1>
-            </header>
-            <main class="signup-body">
-                <!-- Change the action to usertable.html with method GET -->
-                <form id="loginForm">
-                    <p>
-                        <label for="email">Your Email</label>
-                        <input type="text" id="email" placeholder="Your Email" required>
-                    </p>
-                    <p>
-                        <label for="password">Your Password</label>
-                        <input type="password" id="password" placeholder="password" required>
-                    </p>
-                    <p>
-                        <input type="submit" id="loginButton" value="Login">
-                    </p>
-                </form>
-            </main>
-        </div>
-        <div class="circle c1"></div>
-        <div class="circle c2"></div>
+      <div class="inner-box">
+        <header class="signup-header">
+          <h1>Login</h1>
+        </header>
+        <main class="signup-body">
+          <!-- Change the action to usertable.html with method GET -->
+          <form id="loginForm">
+            <p>
+              <label for="email">Your Email</label>
+              <input type="text" id="email" placeholder="Your Email" required />
+            </p>
+            <p>
+              <label for="password">Your Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="password"
+                required
+              />
+            </p>
+            <p>
+              <input type="submit" id="loginButton" value="Login" />
+            </p>
+          </form>
+        </main>
+      </div>
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
     </div>
     <!-- login.html -->
-<script>
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+          var email = document.getElementById("email").value;
+          var password = document.getElementById("password").value;
 
-        // Retrieve users from local storage
-        var users = JSON.parse(localStorage.getItem("users")) || [];
+          // Retrieve users from local storage
+          var users = JSON.parse(localStorage.getItem("users")) || [];
 
-        // Check if the user is registered
-        var user = users.find(function(user) {
+          // Check if the user is registered
+          var user = users.find(function (user) {
             return user.email === email && user.password === password;
-        });
+          });
 
-        if (user) {
-            // User is registered, proceed with login
+          if (user) {
+            // User is registered, set online status to true
+            user.online = true;
+
+            // Save the updated user data
+            localStorage.setItem("users", JSON.stringify(users));
+
             var loginData = { email: email, password: password };
             localStorage.setItem("loginData", JSON.stringify(loginData));
 
             // Redirect to usertable.html
-            window.location.href = "usertable.html?email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
-        } else {
+            window.location.href =
+              "usertable.html?email=" +
+              encodeURIComponent(email) +
+              "&password=" +
+              encodeURIComponent(password);
+          } else {
             // User is not registered, display an error message
-            alert("Invalid email or password. Please check your credentials or sign up.");
+            alert(
+              "Invalid email or password. Please check your credentials or sign up."
+            );
             window.location.href = "signup.html";
-        }
-    });
-</script>
-
-</body>
+          }
+        });
+    </script>
+  </body>
 </html>

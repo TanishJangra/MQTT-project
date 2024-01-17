@@ -5,14 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const currentUsername = JSON.parse(localStorage.getItem('currentLoggedInUser')) || {};
   const clickedUsername = JSON.parse(localStorage.getItem('selectedUser')) || {};
   const client = new Paho.MQTT.Client(broker, port, `clientId_${currentUsername.fullName}_${Date.now()}`);
-  console.log(currentUsername.fullName,clickedUsername.fullName);
- 
+  // console.log(currentUsername.fullName,clickedUsername.fullName);
   // Set the topic for publishing and subscribing
-  const publishTopic = `chat/${currentUsername.fullName}/${clickedUsername.fullName}`;
-  const subscribeTopic = `chat/${clickedUsername.fullName}/${currentUsername.fullName}`;
-
-  console.log(publishTopic, subscribeTopic)
-
+  const publishTopic = `chatwith/${currentUsername.fullName}/${clickedUsername.fullName}`;
+  const subscribeTopic = `chatwith/${clickedUsername.fullName}/${currentUsername.fullName}`;
+  // console.log(publishTopic, subscribeTopic)
   // Set the chat header text
   const chatHeader = document.getElementById('chatHeader');
   chatHeader.textContent = `Chat with ${clickedUsername.fullName}`;
@@ -22,16 +19,15 @@ document.addEventListener('DOMContentLoaded', function () {
       // Publish the message to the selected user's topic
       const messagePayload = JSON.stringify({ sender: currentUsername.fullName, message: message });
       client.send(publishTopic, messagePayload);
-
+      
       // Update the current logged-in user's chatbox
       updateChat(currentUsername.fullName, message, true);
-
-      // For demonstration purposes, you can update your chat UI with the sent message
-      console.log(`Sent message to ${clickedUsername.fullName}: ${message}`);
+      
+    //   console.log(`Sent message to ${clickedUsername.fullName}: ${message}`);
   }
 
   // Function to update the chat UI with a message
-  function updateChat(username, message, isCurrentUser) {
+  function updateChat(username, message, isCurrentUser){
     const chatMessages = document.getElementById('chatMessages');
     const messageDiv = document.createElement('div');
     
@@ -59,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
         updateChat(messageData.sender, messageData.message, false);
     }
 };
-
 
   let options = {
       useSSL: false, // Change to true if the broker supports secure WebSocket

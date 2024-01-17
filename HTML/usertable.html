@@ -1,107 +1,236 @@
 <!-- usertable.html -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Table</title>
-    <link rel="stylesheet" href="../CSS/style.css">
-</head>
+    <link rel="stylesheet" href="../CSS/style.css" />
+  </head>
 
-<body>
+  <body>
     <nav class="navbar">
-        <div class="proj-name">
-            <a href="../index.html" class="app"><h1>ChatBot</h1></a>
-        </div>
-        <div>
-            <ul class="functions">
-                <ul class="register">
-                    <a href="./signup.html" class="reg" target="_blank"><li>Register</li></a>
-                </ul>
-                <ul class="login">
-                    <a href="../index.html" class="log" target="_blank"><li>Logout</li></a>
-                </ul>
+      <div class="proj-name">
+        <a href="../index.html" class="app"><h1>ChatBot</h1></a>
+      </div>
+      <div>
+        <ul class="functions">
+          <ul class="search-box">
+            <ul>
+              <input
+                class="search"
+                type="search"
+                name="search"
+                id="search"
+                placeholder="search user"
+              />
             </ul>
-        </div>
+            <ul>
+              Search
+            </ul>
+          </ul>
+          <ul class="register">
+            <a href="./signup.html" class="reg" target="_blank"
+              ><li>Register</li></a
+            >
+          </ul>
+          <ul class="login">
+            <a href="../index.html" class="log" target="_blank"
+              ><li>Logout</li></a
+            >
+          </ul>
+        </ul>
+      </div>
     </nav>
     <div class="user-table-container">
-        <h1 class="table-header">User Table</h1>
-        <table id="userTable">
-            <thead>
-                <tr>
-                    <th class="full_name">Full Name</th>
-                    <th class="full_name">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- User data will be dynamically added here -->
-            </tbody>
-        </table>
+      <h1 class="table-header">Users</h1>
+      <table id="userTable">
+        <thead>
+          <tr>
+            <th class="full_name">Full Name</th>
+            <th class="full_name">Status</th>
+            <!-- New column for online status -->
+            <th class="full_name">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- User data will be dynamically added here -->
+        </tbody>
+      </table>
     </div>
 
     <script>
-        // Fetch user data from local storage and update the table
-        var users = JSON.parse(localStorage.getItem("users")) || [];
-        var tableBody = document.getElementById("userTable").getElementsByTagName('tbody')[0];
+      // Fetch user data from local storage and update the table
+      var users = JSON.parse(localStorage.getItem("users")) || [];
+      var tableBody = document
+        .getElementById("userTable")
+        .getElementsByTagName("tbody")[0];
 
-        // Get query parameters from the URL
-        var urlParams = new URLSearchParams(window.location.search);
-        // console.log(urlParams);
-        var loggedInEmail = urlParams.get('email');
-        var loggedInPassword = urlParams.get('password');
-        var loggedInName; // New variable to store the name
+      // Get query parameters from the URL
+      var urlParams = new URLSearchParams(window.location.search);
+      var loggedInEmail = urlParams.get("email");
+      var loggedInPassword = urlParams.get("password");
+      var loggedInName; // New variable to store the name
 
-        // Find the user's name based on email
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].email === loggedInEmail && users[i].password === loggedInPassword) {
-                loggedInName = users[i].fullName;
-                break;
-            }
+      var otherUsers = users.filter(function (user) {
+        if (user.email !== loggedInEmail || user.password !== loggedInPassword)
+          return true;
+        else {
+          loggedInName = user.fullName;
+          return false;
         }
-        console.log(loggedInName);
-        // Sort users array based on fullName
-        users.sort((a, b) => a.fullName.localeCompare(b.fullName));
+      });
+      console.log(users);
+      otherUsers.sort((a, b) => a.fullName.localeCompare(b.fullName));
 
-        users.forEach(function (user) {
-            // Check if the current user is the logged-in user
-            if (user.email !== loggedInEmail || user.password !== loggedInPassword) {
-                var row = tableBody.insertRow();
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                cell1.className="users_in_table";
-                cell1.innerHTML = user.fullName;
-                var button = document.createElement("button");
-                button.innerHTML = " chat ";
-                button.className = "action-button";
-                cell2.appendChild(button);
+      otherUsers.forEach(function (user) {
+        var row = tableBody.insertRow();
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2); // New cell for online status
+        cell1.className = "users_in_table";
+        cell1.innerHTML = user.fullName;
+        cell3.className = "online-status"; // Apply a class for styling
+        cell3.innerHTML = user.online ? "Online" : "Offline";
 
-                button.addEventListener("click", function () {
-                    // Handle button click event
-                    // Redirect to chatui.html
-                    // Store both the logged-in user and the clicked user in local storage
-                    localStorage.setItem("currentLoggedInUser", JSON.stringify({
-                        fullName: loggedInName, // Change to fullName
-                    }));
+        var button = document.createElement("button");
+        button.innerHTML = " chat ";
+        button.className = "action-button";
+        cell2.appendChild(button);
 
-                    localStorage.setItem("selectedUser", JSON.stringify({
-                        fullName: user.fullName,
-                    }));
+        button.addEventListener("click", function () {
+          localStorage.setItem(
+            "currentLoggedInUser",
+            JSON.stringify({
+              fullName: loggedInName,
+            })
+          );
 
-                    // Redirect to chatui.html
-                    window.location.href = "chatui.html";
-                });
-            }
+          localStorage.setItem(
+            "selectedUser",
+            JSON.stringify({
+              fullName: user.fullName,
+            })
+          );
+
+          window.location.href = "chatui.html";
         });
-        // Logout button click event
-        document.querySelector('.log').addEventListener('click', function () {
-            // Remove login data from local storage
-            localStorage.removeItem('loginData');
+      });
 
-            // Redirect to index.html
-            window.location.href = "index.html";
+      // Search input field event listener
+      document.getElementById("search").addEventListener("input", function () {
+        var searchQuery = this.value.trim();
+        if (searchQuery === "") {
+          // If search input is empty, show the entire table
+          tableBody.innerHTML = "";
+          otherUsers.forEach(function (user) {
+            var row = tableBody.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.className = "users_in_table";
+            cell1.innerHTML = user.fullName;
+            cell3.className = "online-status";
+            cell3.innerHTML = user.online ? "Online" : "Offline";
+
+            var button = document.createElement("button");
+            button.innerHTML = " chat ";
+            button.className = "action-button";
+            cell2.appendChild(button);
+
+            button.addEventListener("click", function () {
+              localStorage.setItem(
+                "currentLoggedInUser",
+                JSON.stringify({
+                  fullName: loggedInName,
+                })
+              );
+
+              localStorage.setItem(
+                "selectedUser",
+                JSON.stringify({
+                  fullName: user.fullName,
+                })
+              );
+
+              window.location.href = "chatui.html";
+            });
+          });
+        } else {
+          // If search input is not empty, filter and display users
+          filterUsers(searchQuery);
+        }
+      });
+
+      // Function to filter and display users based on the search input
+      function filterUsers(searchQuery) {
+        tableBody.innerHTML = "";
+
+        var filteredUsers = otherUsers.filter(function (user) {
+          return user.fullName
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
         });
+
+        if (filteredUsers.length === 0) {
+          var row = tableBody.insertRow();
+          var cell = row.insertCell(0);
+          cell.colSpan = 3;
+          cell.textContent = "No user found";
+        } else {
+          filteredUsers.forEach(function (user) {
+            var row = tableBody.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.className = "users_in_table";
+            cell1.innerHTML = user.fullName;
+            cell3.className = "online-status";
+            cell3.innerHTML = "Offline"; // Default status
+
+            var button = document.createElement("button");
+            button.innerHTML = " chat ";
+            button.className = "action-button";
+            cell2.appendChild(button);
+
+            button.addEventListener("click", function () {
+              localStorage.setItem(
+                "currentLoggedInUser",
+                JSON.stringify({
+                  fullName: loggedInName,
+                })
+              );
+
+              localStorage.setItem(
+                "selectedUser",
+                JSON.stringify({
+                  fullName: user.fullName,
+                })
+              );
+
+              window.location.href = "chatui.html";
+            });
+          });
+        }
+      }
+
+      // Logout button click event
+      document.querySelector(".log").addEventListener("click", function () {
+        // Set online status to false before logging out
+        var loggedInUser = users.find(function (user) {
+          return (
+            user.email === loggedInEmail && user.password === loggedInPassword
+          );
+        });
+
+        if (loggedInUser) {
+          loggedInUser.online = false;
+          localStorage.setItem("users", JSON.stringify(users));
+        }
+
+        localStorage.removeItem("loginData");
+        window.location.href = "../index.html";
+      });
     </script>
-</body>
-
+  </body>
 </html>
